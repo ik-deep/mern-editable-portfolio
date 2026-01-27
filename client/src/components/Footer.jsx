@@ -1,6 +1,13 @@
 import { Github, Linkedin, Twitter } from 'lucide-react';
+import { AuthContext } from '../context/Authcontext.jsx';
+import { defaultHeroData } from '../utils/DefaultPortfolioData.js';
+import { useContext } from 'react';
+
 
 const Footer = () => {
+  const { portfolioData } = useContext(AuthContext);
+  const data = portfolioData || defaultHeroData;
+
   return (
     <footer className="py-8 bg-background border-t border-border">
       <div className="container mx-auto px-6">
@@ -8,10 +15,10 @@ const Footer = () => {
           <p className="text-muted-foreground text-sm font-mono">
             Designed & Built by Irfan Khan
           </p>
-          
+
           <div className="flex items-center gap-6">
             <a
-              href="https://github.com"
+              href={data?.github}
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-primary transition-colors"
@@ -19,7 +26,7 @@ const Footer = () => {
               <Github className="w-5 h-5" />
             </a>
             <a
-              href="https://linkedin.com"
+              href={data?.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-primary transition-colors"

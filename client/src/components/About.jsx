@@ -41,8 +41,11 @@ const About = () => {
                 <div className="absolute -inset-2 bg-primary/20 rounded-lg blur-lg group-hover:bg-primary/30 transition-all duration-300" />
                 <div className="relative bg-muted rounded-lg overflow-hidden border-2 border-primary/50">
                   <div className="aspect-square bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                    {/* <div className="text-6xl">👨‍💻</div> */}
-                    <img src={profileImage} alt="profileImg" />
+                    {
+                      data.userId ? <div className="text-6xl">👨‍💻</div> : <img src={profileImage} alt="profileImg" />
+
+                    }
+
                   </div>
                 </div>
               </div>

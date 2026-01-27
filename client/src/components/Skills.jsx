@@ -1,10 +1,12 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '../context/Authcontext.jsx';
 import { defaultSkillsData } from '../utils/DefaultPortfolioData.js';
 
 const Skills = () => {
   const { portfolioData } = useContext(AuthContext);
   const skillCategories = portfolioData?.skills || defaultSkillsData;
+  const [showSkillsProjects, setShowSkillsProjects] = useState(false);
+  const displayedOtherProjects = showSkillsProjects ? skillCategories : skillCategories.slice(0, 3);
 
   return (
     <section id="skills" className="py-24 bg-secondary/30">
@@ -14,11 +16,11 @@ const Skills = () => {
             <span className="text-primary font-mono text-lg mr-2">02.</span>
             Skills & Expertise
           </h2>
-          
+
           <div className="w-20 h-1 bg-primary rounded-full mb-12" />
 
           <div className="grid md:grid-cols-3 gap-8">
-            {skillCategories?.map((category, index) => (
+            {displayedOtherProjects?.map((category, index) => (
               <div
                 key={category.title}
                 className="bg-card rounded-xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 border border-border"
@@ -41,6 +43,16 @@ const Skills = () => {
               </div>
             ))}
           </div>
+          {skillCategories.length > 3 && (
+            <div className="text-center mt-4">
+              <button
+                onClick={() => setShowSkillsProjects(!showSkillsProjects)}
+                className="px-6 py-3 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 rounded-lg font-medium"
+              >
+                {showSkillsProjects ? 'Show Less' : `See More (${skillCategories.length - 3} more)`}
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </section>

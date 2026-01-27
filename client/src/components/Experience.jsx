@@ -5,7 +5,7 @@ import { defaultExperienceData } from '../utils/DefaultPortfolioData.js';
 
 const Experience = () => {
   const { portfolioData } = useContext(AuthContext);
-  const experiences = portfolioData?.experience || defaultExperienceData;
+  const experiences = portfolioData?.experiences || defaultExperienceData;
   return (
     <section id="experiences" className="py-20 bg-muted/30">
       <div className="container mx-auto px-6">

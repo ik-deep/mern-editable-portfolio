@@ -6,12 +6,15 @@ import CustomFormModal from './CustomFormModal.jsx';
 import LoginModal from './auth/LoginModal.jsx';
 import RegisterModal from './auth/RegisterModal.jsx';
 
+
 const Navbar = ({ initialData }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
-  const { isLoggedIn, logout } = useContext(AuthContext);
+  const { isLoggedIn, logout, portfolioData } = useContext(AuthContext);
+  
+  const resumeUrl = portfolioData?.resumeUrl || 'https://drive.google.com/file/d/1k6jxKA46fVrRNUfK5QCkATe_MKcjhCom/view?usp=drivesdk';
   
   const navLinks = [
     { name: 'About', href: '#about' },
@@ -28,10 +31,16 @@ const Navbar = ({ initialData }) => {
           <div className="flex items-center justify-between">
             <a href="#" className="text-xl font-bold text-foreground hover:text-primary transition-colors">
               <span className="text-primary">&lt;</span>
-              Dev
+              DevFolio
               <span className="text-primary">/&gt;</span>
             </a>
-
+ {isLoggedIn && (
+              <button
+                onClick={() => setIsFormOpen(true)}
+                className="hidden sm:inline-flex px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium text-sm hover:opacity-90 transition-opacity"
+              >
+                Edit Content
+              </button>)}
             <div className="hidden md:flex items-center gap-8">
               {navLinks.map((link) => (
                 <a
@@ -54,12 +63,18 @@ const Navbar = ({ initialData }) => {
                   Logout
                 </button>
               ) : (
-                <button
-                  onClick={() => setIsLoginOpen(true)}
-                  className="hidden sm:inline-flex px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium text-sm hover:opacity-90 transition-opacity"
-                >
-                  Login
-                </button>
+                <div className="relative group">
+                  <button
+                    onClick={() => setIsLoginOpen(true)}
+                    className="hidden sm:inline-flex px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium text-sm hover:opacity-90 transition-opacity"
+                  >
+                    Login
+                  </button>
+                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap pointer-events-none z-50">
+                    Login here to add your content
+                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-gray-900"></div>
+                  </div>
+                </div>
               )}
               <a
                 href="#contact"
@@ -67,13 +82,15 @@ const Navbar = ({ initialData }) => {
               >
                 Hire Me
               </a>
-               {isLoggedIn && (
-              <button
-                onClick={() => setIsFormOpen(true)}
-                className="hidden sm:inline-flex px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium text-sm hover:opacity-90 transition-opacity"
+              <a
+                href={resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hidden sm:inline-flex px-4 py-2 bg-secondary text-secondary-foreground rounded-lg font-medium text-sm hover:opacity-90 transition-opacity"
               >
-                Custom Form
-              </button>)}
+                Download Resume
+              </a>
+              
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="md:hidden p-2 text-muted-foreground hover:text-primary transition-colors"
@@ -108,15 +125,17 @@ const Navbar = ({ initialData }) => {
                     Logout
                   </button>
                 ) : (
-                  <button
-                    onClick={() => {
-                      setIsLoginOpen(true);
-                      setIsOpen(false);
-                    }}
-                    className="inline-flex px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium text-sm hover:opacity-90 transition-opacity w-fit"
-                  >
-                    Login
-                  </button>
+                  <div className="relative group">
+                    <button
+                      onClick={() => {
+                        setIsLoginOpen(true);
+                        setIsOpen(false);
+                      }}
+                      className="inline-flex px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium text-sm hover:opacity-90 transition-opacity w-fit"
+                    >
+                      Login
+                    </button>
+                  </div>
                 )}
                 <a
                   href="#contact"
@@ -124,6 +143,15 @@ const Navbar = ({ initialData }) => {
                   className="inline-flex px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium text-sm hover:opacity-90 transition-opacity w-fit"
                 >
                   Hire Me
+                </a>
+                <a
+                  href={resumeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setIsOpen(false)}
+                  className="inline-flex px-4 py-2 bg-secondary text-secondary-foreground rounded-lg font-medium text-sm hover:opacity-90 transition-opacity w-fit"
+                >
+                  Download Resume
                 </a>
                   {isLoggedIn && (
                 <button
@@ -133,12 +161,19 @@ const Navbar = ({ initialData }) => {
                   }}
                   className="inline-flex px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium text-sm hover:opacity-90 transition-opacity w-fit"
                 >
-                  Custom Form
+                  Edit Content
                 </button>)}
               </div>
             </div>
           )}
         </div>
+        {!isLoggedIn && (
+          <div className="overflow-hidden bg-primary/10 border-t border-primary/20">
+            <div className="animate-slide-left-right whitespace-nowrap py-2 text-sm text-primary font-medium ">
+              Please Login to add your content!
+            </div>
+          </div>
+        )}
       </nav>
 
       <CustomFormModal isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} initialData={initialData}/>
